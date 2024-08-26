@@ -1,0 +1,7 @@
+azure-iot-device
+azure-iot-hub
+google-cloud-iot
+kafka-python
+scikit-learn
+tensorflow
+pandas
