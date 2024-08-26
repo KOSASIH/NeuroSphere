@@ -43,3 +43,50 @@ class DataMarketList(Resource):
         data_market = data_market_module.create_data_market(data['name'], data['description'])
         return {'data_market': data_market.to_dict()}, 201
 
+@ns.route('/<int:data_market_id>')
+class DataMarket(Resource):
+    def get(self, data_market_id):
+        data_market = data_market_module.get_data_market(data_market_id)
+        if data_market is None:
+            return {'error': 'Data market not found'}, 404
+        return {'data_market': data_market.to_dict()}
+
+    def put(self, data_market_id):
+        data = request.get_json()
+        data_market = data_market_module.update_data_market(data_market_id, data['name'], data['description'])
+        return {'data_market': data_market.to_dict()}
+
+    def delete(self, data_market_id):
+        data_market_module.delete_data_market(data_market_id)
+        return '', 204
+
+@ns.route('/<int:data_market_id>/datasets')
+class DatasetList(Resource):
+    def get(self, data_market_id):
+        datasets = data_market_module.get_datasets(data_market_id)
+        return {'datasets': [dataset.to_dict() for dataset in datasets]}
+
+    def post(self, data_market_id):
+        data = request.get_json()
+        dataset = data_market_module.create_dataset(data_market_id, data['name'], data['description'], data['data'])
+        return {'dataset': dataset.to_dict()}, 201
+
+@ns.route('/<int:data_market_id>/datasets/<int:dataset_id>')
+class Dataset(Resource):
+    def get(self, data_market_id, dataset_id):
+        dataset = data_market_module.get_dataset(data_market_id, dataset_id)
+        if dataset is None:
+            return {'error': 'Dataset not found'}, 404
+        return {'dataset': dataset.to_dict()}
+
+    def put(self, data_market_id, dataset_id):
+        data = request.get_json()
+        dataset = data_market_module.update_dataset(data_market_id, dataset_id, data['name'], data['description'], data['data'])
+        return {'dataset': dataset.to_dict()}
+
+    def delete(self, data_market_id, dataset_id):
+        data_market_module.delete_dataset(data_market_id, dataset_id)
+        return '', 204
+
+if __name__ == '__main__':
+    app.run(debug=True)
