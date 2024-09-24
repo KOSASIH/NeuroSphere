@@ -28,5 +28,5 @@ pytest-cov==2.12.1
 
 # Development dependencies
 jupyter==1.0.0
-ipython==7.29.0
+ipython==8.10.0
 ipykernel==5.5.5
